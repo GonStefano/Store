@@ -80,7 +80,12 @@ public class ProductController {
 
     @GetMapping("/platform/{platform}")
     public ResponseEntity<List<Product>> getPlatform(@PathVariable String platform) {
-        return ResponseEntity.ok(productService.ProductByPlatform(platform));
+        List<Product> products = productService.ProductByPlatform(platform);
+        if (products == null) {
+            return ResponseEntity.noContent().build();
+        }else{
+            return ResponseEntity.ok(products);
+        }
     }
     
     
