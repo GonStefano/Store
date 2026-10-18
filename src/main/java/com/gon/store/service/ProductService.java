@@ -1,6 +1,7 @@
 package com.gon.store.service;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,4 +28,12 @@ public class ProductService {
 
         return productRepository.save(product);
     }
+
+    public Optional<Product> findById(Long id){
+        return productRepository.findById(id);
+    }
+
+    public Iterable<Product> findAll(){
+        return productRepository.findAll();
+    } 
 }
