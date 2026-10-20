@@ -4,8 +4,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.gon.store.model.Product;
-import com.gon.store.service.ProductService;
+import com.gon.store.dto.VideoGameRequestDTO;
+import com.gon.store.dto.VideoGameResponseDTO;
+import com.gon.store.service.VideoGameService;
+
+import jakarta.validation.Valid;
 
 import java.net.URI;
 import java.util.List;
@@ -23,16 +26,16 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/api/videojuegos")
-public class ProductController {
-    private final ProductService productService;
+public class VideoGameController {
+    private final VideoGameService productService;
 
-    private ProductController(ProductService productService){
+    private VideoGameController(VideoGameService productService){
         this.productService = productService;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> findById(@PathVariable Long id) {
-        Optional<Product> optionalProduct = productService.findById(id);
+    public ResponseEntity<VideoGameResponseDTO> findById(@PathVariable Long id) {
+        Optional<VideoGameResponseDTO> optionalProduct = productService.findById(id);
 
         if (optionalProduct.isPresent()) {
             return ResponseEntity.ok(optionalProduct.get());
@@ -42,13 +45,13 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> findAll() {
+    public ResponseEntity<List<VideoGameResponseDTO>> findAll() {
         return ResponseEntity.ok(productService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Void> createProduct(@RequestBody Product product, UriComponentsBuilder ucb) {
-        Product producto = productService.createProduct(product);
+    public ResponseEntity<Void> createProduct(@Valid @RequestBody VideoGameRequestDTO product, UriComponentsBuilder ucb) {
+        VideoGameResponseDTO producto = productService.createProduct(product);
         URI locationOfNewProduct = ucb
             .path("/api/videojuegos/{id}")
             .buildAndExpand(producto.id())
@@ -57,7 +60,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+    public ResponseEntity<Void> updateProduct(@PathVariable Long id, @Valid @RequestBody VideoGameRequestDTO product) {
         boolean update = productService.updateProduct(id, product);
         
         if (update) {
@@ -79,8 +82,8 @@ public class ProductController {
     }
 
     @GetMapping("/platform/{platform}")
-    public ResponseEntity<List<Product>> getPlatform(@PathVariable String platform) {
-        List<Product> products = productService.ProductByPlatform(platform);
+    public ResponseEntity<List<VideoGameResponseDTO>> getPlatform(@PathVariable String platform) {
+        List<VideoGameResponseDTO> products = productService.ProductByPlatform(platform);
         if (products == null) {
             return ResponseEntity.noContent().build();
         }else{

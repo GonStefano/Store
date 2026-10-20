@@ -18,7 +18,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
-import com.gon.store.model.Product;
+import com.gon.store.dto.VideoGameRequestDTO;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 
@@ -33,7 +33,7 @@ class StoreApplicationTests {
 	@Test
 	@DirtiesContext 
 	void shouldSaveANewProduct(){
-		Product newProduct = new Product(null, "Baldurs Gate 3", "PC", "RPG", new BigDecimal("59.99"), 10, LocalDate.parse("2023-08-03"));
+		VideoGameRequestDTO newProduct = new VideoGameRequestDTO("Baldurs Gate 3", "PC", "RPG", new BigDecimal("59.99"), 10, LocalDate.parse("2023-08-03"));
 		ResponseEntity<Void> createResponse = restTemplate.postForEntity("/api/videojuegos", newProduct,Void.class);
 		assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
@@ -45,12 +45,12 @@ class StoreApplicationTests {
 	@Test
 	@DirtiesContext 
 	void shouldSaveAWrongProduct(){
-		Product newProduct = new Product(null, "Albion Online", "PC", "MMORPG", null, 0, LocalDate.parse("2012-08-12"));
+		VideoGameRequestDTO newProduct = new VideoGameRequestDTO("Albion Online", "PC", "MMORPG", null, 0, LocalDate.parse("2012-08-12"));
 		ResponseEntity<Void> response = restTemplate.postForEntity("/api/videojuegos", newProduct, Void.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		assertThat(response.getHeaders().getLocation()).isNull();
 
-		Product newProduct1 = new Product(null, "Albion Online", "PC", "MMORPG", new BigDecimal("19.99"), -1, LocalDate.parse("2012-08-12"));
+		VideoGameRequestDTO newProduct1 = new VideoGameRequestDTO("Albion Online", "PC", "MMORPG", new BigDecimal("19.99"), -1, LocalDate.parse("2012-08-12"));
 		ResponseEntity<Void> response1 = restTemplate.postForEntity("/api/videojuegos", newProduct1, Void.class);
 		assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		assertThat(response1.getHeaders().getLocation()).isNull();
@@ -100,8 +100,8 @@ class StoreApplicationTests {
 	@Test
 	@DirtiesContext
 	void shouldUpdateAnExistingProduct(){
-		Product product = new Product(null, "Hollow Knight", "PC", "Metroidvania", new BigDecimal(5.00), 50, LocalDate.parse("2017-02-24"));
-		HttpEntity<Product> request = new HttpEntity<>(product);
+		VideoGameRequestDTO product = new VideoGameRequestDTO("Hollow Knight", "PC", "Metroidvania", new BigDecimal("5.00"), 50, LocalDate.parse("2017-02-24"));
+		HttpEntity<VideoGameRequestDTO> request = new HttpEntity<>(product);
 		ResponseEntity<Void> response = restTemplate.exchange("/api/videojuegos/102", HttpMethod.PUT, request, Void.class);
 		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 
