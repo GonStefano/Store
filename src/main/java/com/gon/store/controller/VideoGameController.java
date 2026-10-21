@@ -25,20 +25,20 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/api/videojuegos")
+@RequestMapping("/api/videogames")
 public class VideoGameController {
-    private final VideoGameService productService;
+    private final VideoGameService videoGameService;
 
-    private VideoGameController(VideoGameService productService){
-        this.productService = productService;
+    private VideoGameController(VideoGameService videoGameService){
+        this.videoGameService = videoGameService;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<VideoGameResponseDTO> findById(@PathVariable Long id) {
-        Optional<VideoGameResponseDTO> optionalProduct = productService.findById(id);
+        Optional<VideoGameResponseDTO> optionalVideoGame = videoGameService.findById(id);
 
-        if (optionalProduct.isPresent()) {
-            return ResponseEntity.ok(optionalProduct.get());
+        if (optionalVideoGame.isPresent()) {
+            return ResponseEntity.ok(optionalVideoGame.get());
         }else{
             return ResponseEntity.notFound().build();
         }
@@ -46,22 +46,22 @@ public class VideoGameController {
 
     @GetMapping
     public ResponseEntity<List<VideoGameResponseDTO>> findAll() {
-        return ResponseEntity.ok(productService.findAll());
+        return ResponseEntity.ok(videoGameService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Void> createProduct(@Valid @RequestBody VideoGameRequestDTO product, UriComponentsBuilder ucb) {
-        VideoGameResponseDTO producto = productService.createProduct(product);
-        URI locationOfNewProduct = ucb
-            .path("/api/videojuegos/{id}")
-            .buildAndExpand(producto.id())
+    public ResponseEntity<Void> createVideoGame(@Valid @RequestBody VideoGameRequestDTO videoGame, UriComponentsBuilder ucb) {
+        VideoGameResponseDTO game = videoGameService.createVideoGame(videoGame);
+        URI locationOfNewVideoGame = ucb
+            .path("/api/videogames/{id}")
+            .buildAndExpand(game.id())
             .toUri();
-        return ResponseEntity.created(locationOfNewProduct).build();
+        return ResponseEntity.created(locationOfNewVideoGame).build();
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateProduct(@PathVariable Long id, @Valid @RequestBody VideoGameRequestDTO product) {
-        boolean update = productService.updateProduct(id, product);
+    public ResponseEntity<Void> updateVideoGame(@PathVariable Long id, @Valid @RequestBody VideoGameRequestDTO videoGame) {
+        boolean update = videoGameService.updateVideoGame(id, videoGame);
         
         if (update) {
             return ResponseEntity.noContent().build();
@@ -71,25 +71,19 @@ public class VideoGameController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
-        boolean delete = productService.deleteProduct(id);
+    public ResponseEntity<Void> deleteVideoGame(@PathVariable Long id){
+        boolean delete = videoGameService.deleteVideoGame(id);
         
         if (delete) {
             return ResponseEntity.noContent().build();
         }
-            
+           
         return ResponseEntity.notFound().build();
     }
 
     @GetMapping("/platform/{platform}")
     public ResponseEntity<List<VideoGameResponseDTO>> getPlatform(@PathVariable String platform) {
-        List<VideoGameResponseDTO> products = productService.ProductByPlatform(platform);
-        if (products == null) {
-            return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.ok(products);
-        }
+        List<VideoGameResponseDTO> videoGame = videoGameService.findByPlatform(platform);
+        return ResponseEntity.ok(videoGame);
     }
-    
-    
 }

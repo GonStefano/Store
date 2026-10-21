@@ -32,33 +32,35 @@ class StoreApplicationTests {
 	
 	@Test
 	@DirtiesContext 
-	void shouldSaveANewProduct(){
-		VideoGameRequestDTO newProduct = new VideoGameRequestDTO("Baldurs Gate 3", "PC", "RPG", new BigDecimal("59.99"), 10, LocalDate.parse("2023-08-03"));
-		ResponseEntity<Void> createResponse = restTemplate.postForEntity("/api/videojuegos", newProduct,Void.class);
+	void shouldSaveANewVideoGame(){
+		VideoGameRequestDTO newVideoGame = new VideoGameRequestDTO("Baldurs Gate 3", "PC", "RPG", new BigDecimal("59.99"), 10, LocalDate.parse("2023-08-03"));
+		ResponseEntity<Void> createResponse = restTemplate.postForEntity("/api/videogames", newVideoGame,Void.class);
 		assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
-		URI locationOfNewProduct = createResponse.getHeaders().getLocation();
-		ResponseEntity<String> getResponse = restTemplate.getForEntity(locationOfNewProduct,String.class);
+		URI locationOfNewVideoGame = createResponse.getHeaders().getLocation();
+		ResponseEntity<String> getResponse = restTemplate.getForEntity(locationOfNewVideoGame,String.class);
 		assertThat(getResponse.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
 	@Test
 	@DirtiesContext 
-	void shouldSaveAWrongProduct(){
-		VideoGameRequestDTO newProduct = new VideoGameRequestDTO("Albion Online", "PC", "MMORPG", null, 0, LocalDate.parse("2012-08-12"));
-		ResponseEntity<Void> response = restTemplate.postForEntity("/api/videojuegos", newProduct, Void.class);
+	void shouldSaveAWrongVideoGame(){
+		VideoGameRequestDTO newVideoGame = new VideoGameRequestDTO("Albion Online", "PC", "MMORPG", null, 0, LocalDate.parse("2012-08-12"));
+		ResponseEntity<String> response = restTemplate.postForEntity("/api/videogames", newVideoGame, String.class);
+
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		assertThat(response.getHeaders().getLocation()).isNull();
 
-		VideoGameRequestDTO newProduct1 = new VideoGameRequestDTO("Albion Online", "PC", "MMORPG", new BigDecimal("19.99"), -1, LocalDate.parse("2012-08-12"));
-		ResponseEntity<Void> response1 = restTemplate.postForEntity("/api/videojuegos", newProduct1, Void.class);
+		VideoGameRequestDTO newVideoGame1 = new VideoGameRequestDTO("Albion Online", "PC", "MMORPG", new BigDecimal("19.99"), -1, LocalDate.parse("2012-08-12"));
+		ResponseEntity<String> response1 = restTemplate.postForEntity("/api/videogames", newVideoGame1, String.class);
+
 		assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		assertThat(response1.getHeaders().getLocation()).isNull();
 	}
 
 	@Test
-	void shouldReturnAProduct(){
-		ResponseEntity<String> response = restTemplate.getForEntity("/api/videojuegos/99",String.class);
+	void shouldReturnAVideoGame(){
+		ResponseEntity<String> response = restTemplate.getForEntity("/api/videogames/99",String.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		DocumentContext documentContext = JsonPath.parse(response.getBody());
 
@@ -70,14 +72,14 @@ class StoreApplicationTests {
 	}
 
 	@Test
-	void shouldReturnAProductWhenIsNotSaved(){
-		ResponseEntity<String> response = restTemplate.getForEntity("/api/videojuegos/50",String.class);
+	void shouldReturnAVideoGameWhenIsNotSaved(){
+		ResponseEntity<String> response = restTemplate.getForEntity("/api/videogames/50",String.class);
 		assertEquals(response.getStatusCode(),HttpStatus.NOT_FOUND);
 	}
 
 	@Test
-	void shouldReturnAllProducts(){
-		ResponseEntity<String> response = restTemplate.getForEntity("/api/videojuegos", String.class);
+	void shouldReturnAllVideoGames(){
+		ResponseEntity<String> response = restTemplate.getForEntity("/api/videogames", String.class);
 		assertEquals(response.getStatusCode(), HttpStatus.OK);
 
 		DocumentContext documentContext = JsonPath.parse(response.getBody());
@@ -87,25 +89,25 @@ class StoreApplicationTests {
 	}
 
 	@Test
-	void shouldReturnProductsByCategory(){
-		ResponseEntity<String> response = restTemplate.getForEntity("/api/videojuegos/platform/PC",String.class);
+	void shouldReturnVideoGamesByCategory(){
+		ResponseEntity<String> response = restTemplate.getForEntity("/api/videogames/platform/PC",String.class);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 
 		DocumentContext documentContext = JsonPath.parse(response.getBody());
 
-		int productCount = documentContext.read("$.length()");
-		assertEquals(2, productCount);
+		int videoGameCount = documentContext.read("$.length()");
+		assertEquals(2, videoGameCount);
 	}
 
 	@Test
 	@DirtiesContext
-	void shouldUpdateAnExistingProduct(){
-		VideoGameRequestDTO product = new VideoGameRequestDTO("Hollow Knight", "PC", "Metroidvania", new BigDecimal("5.00"), 50, LocalDate.parse("2017-02-24"));
-		HttpEntity<VideoGameRequestDTO> request = new HttpEntity<>(product);
-		ResponseEntity<Void> response = restTemplate.exchange("/api/videojuegos/102", HttpMethod.PUT, request, Void.class);
+	void shouldUpdateAnExistingVideoGame(){
+		VideoGameRequestDTO videoGame = new VideoGameRequestDTO("Hollow Knight", "PC", "Metroidvania", new BigDecimal("5.00"), 50, LocalDate.parse("2017-02-24"));
+		HttpEntity<VideoGameRequestDTO> request = new HttpEntity<>(videoGame);
+		ResponseEntity<Void> response = restTemplate.exchange("/api/videogames/102", HttpMethod.PUT, request, Void.class);
 		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
 
-		ResponseEntity<String> responseEntity = restTemplate.getForEntity("/api/videojuegos/102", String.class);
+		ResponseEntity<String> responseEntity = restTemplate.getForEntity("/api/videogames/102", String.class);
 		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
 		DocumentContext documentContext = JsonPath.parse(responseEntity.getBody());
@@ -115,8 +117,8 @@ class StoreApplicationTests {
 
 	@Test
 	@DirtiesContext 
-	void shouldDeleteAnExistingProduct(){
-		ResponseEntity<Void> responseEntity = restTemplate.exchange("/api/videojuegos/100", HttpMethod.DELETE, null, Void.class);
+	void shouldDeleteAnExistingVideoGame(){
+		ResponseEntity<Void> responseEntity = restTemplate.exchange("/api/videogames/100", HttpMethod.DELETE, null, Void.class);
 		assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
 	}
 
