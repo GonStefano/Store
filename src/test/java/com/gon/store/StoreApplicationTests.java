@@ -17,6 +17,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.gon.store.dto.VideoGameRequestDTO;
 import com.jayway.jsonpath.DocumentContext;
@@ -122,4 +123,22 @@ class StoreApplicationTests {
 		assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
 	}
 
+	@Test
+	void shouldReturnAListPriceBetween(){
+		String url = UriComponentsBuilder.fromPath("/api/videogames/price")
+						.queryParam("minPrice", "2.00")
+						.queryParam("maxPrice", "5.00")
+						.toUriString();
+		ResponseEntity<Void> responseEntity = restTemplate.getForEntity(url, Void.class);
+
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+	}
+
+	@Test 
+	void  shouldReturnAListBytock(){
+		ResponseEntity<Void> responseEntity = restTemplate.getForEntity("/api/videogames/stock/2", Void.class);
+
+		assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+	}
 }
+

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.gon.store.dto.PriceBetweenRequestDTO;
 import com.gon.store.dto.VideoGameRequestDTO;
 import com.gon.store.dto.VideoGameResponseDTO;
 import com.gon.store.service.VideoGameService;
@@ -12,17 +13,15 @@ import jakarta.validation.Valid;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
-
-
 
 @RestController
 @RequestMapping("/api/videogames")
@@ -35,13 +34,7 @@ public class VideoGameController {
 
     @GetMapping("/{id}")
     public ResponseEntity<VideoGameResponseDTO> findById(@PathVariable Long id) {
-        Optional<VideoGameResponseDTO> optionalVideoGame = videoGameService.findById(id);
-
-        if (optionalVideoGame.isPresent()) {
-            return ResponseEntity.ok(optionalVideoGame.get());
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+        return ResponseEntity.ok(videoGameService.findById(id));
     }
 
     @GetMapping
@@ -61,29 +54,29 @@ public class VideoGameController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateVideoGame(@PathVariable Long id, @Valid @RequestBody VideoGameRequestDTO videoGame) {
-        boolean update = videoGameService.updateVideoGame(id, videoGame);
-        
-        if (update) {
-            return ResponseEntity.noContent().build();
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+        videoGameService.updateVideoGame(id, videoGame);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteVideoGame(@PathVariable Long id){
-        boolean delete = videoGameService.deleteVideoGame(id);
-        
-        if (delete) {
-            return ResponseEntity.noContent().build();
-        }
-           
-        return ResponseEntity.notFound().build();
+        videoGameService.deleteVideoGame(id);
+        return  ResponseEntity.noContent().build();
     }
 
     @GetMapping("/platform/{platform}")
     public ResponseEntity<List<VideoGameResponseDTO>> getPlatform(@PathVariable String platform) {
-        List<VideoGameResponseDTO> videoGame = videoGameService.findByPlatform(platform);
-        return ResponseEntity.ok(videoGame);
+        return ResponseEntity.ok(videoGameService.findByPlatform(platform));
     }
+
+    @GetMapping("/price")
+    public ResponseEntity<List<VideoGameResponseDTO>> getGameByPriceBetween (@Valid @ModelAttribute PriceBetweenRequestDTO prices) {
+        return ResponseEntity.ok(videoGameService.findByPriceBetween(prices));
+    }
+
+    @GetMapping("/out-of-stock")
+    public ResponseEntity<List<VideoGameResponseDTO>> getGameByStockEquals() {
+        return ResponseEntity.ok(videoGameService.findByStockEquals());
+    }
+
 }

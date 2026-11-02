@@ -17,6 +17,11 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler(VideoGameNotFoundException.class)
+    public ProblemDetail handleNotFound(VideoGameNotFoundException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handlerValidation(MethodArgumentNotValidException ex){
         var errors = ex.getBindingResult().getFieldErrors().stream()
