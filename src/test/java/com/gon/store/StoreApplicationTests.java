@@ -34,7 +34,7 @@ class StoreApplicationTests {
 	@Test
 	@DirtiesContext 
 	void shouldSaveANewVideoGame(){
-		VideoGameRequestDTO newVideoGame = new VideoGameRequestDTO("Baldurs Gate 3", "PC", "RPG", new BigDecimal("59.99"), 10, LocalDate.parse("2023-08-03"));
+		VideoGameRequestDTO newVideoGame = new VideoGameRequestDTO("Baldurs Gate 3", "PC", "RPG", new BigDecimal("59.99"), 10, LocalDate.parse("2023-08-03"),1L);
 		ResponseEntity<Void> createResponse = restTemplate.postForEntity("/api/videogames", newVideoGame,Void.class);
 		assertThat(createResponse.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
@@ -46,13 +46,13 @@ class StoreApplicationTests {
 	@Test
 	@DirtiesContext 
 	void shouldSaveAWrongVideoGame(){
-		VideoGameRequestDTO newVideoGame = new VideoGameRequestDTO("Albion Online", "PC", "MMORPG", null, 0, LocalDate.parse("2012-08-12"));
+		VideoGameRequestDTO newVideoGame = new VideoGameRequestDTO("Albion Online", "PC", "MMORPG", null, 0, LocalDate.parse("2012-08-12"),1l);
 		ResponseEntity<String> response = restTemplate.postForEntity("/api/videogames", newVideoGame, String.class);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 		assertThat(response.getHeaders().getLocation()).isNull();
 
-		VideoGameRequestDTO newVideoGame1 = new VideoGameRequestDTO("Albion Online", "PC", "MMORPG", new BigDecimal("19.99"), -1, LocalDate.parse("2012-08-12"));
+		VideoGameRequestDTO newVideoGame1 = new VideoGameRequestDTO("Albion Online", "PC", "MMORPG", new BigDecimal("19.99"), -1, LocalDate.parse("2012-08-12"),1l);
 		ResponseEntity<String> response1 = restTemplate.postForEntity("/api/videogames", newVideoGame1, String.class);
 
 		assertThat(response1.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
@@ -103,7 +103,7 @@ class StoreApplicationTests {
 	@Test
 	@DirtiesContext
 	void shouldUpdateAnExistingVideoGame(){
-		VideoGameRequestDTO videoGame = new VideoGameRequestDTO("Hollow Knight", "PC", "Metroidvania", new BigDecimal("5.00"), 50, LocalDate.parse("2017-02-24"));
+		VideoGameRequestDTO videoGame = new VideoGameRequestDTO("Hollow Knight", "PC", "Metroidvania", new BigDecimal("5.00"), 50, LocalDate.parse("2017-02-24"),1l);
 		HttpEntity<VideoGameRequestDTO> request = new HttpEntity<>(videoGame);
 		ResponseEntity<Void> response = restTemplate.exchange("/api/videogames/102", HttpMethod.PUT, request, Void.class);
 		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());

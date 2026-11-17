@@ -80,8 +80,4 @@ public class Customer {
     public void setRegistrationDate(LocalDate registrationDate) {
         this.registrationDate = registrationDate;
     }
-
-    
-    
-
 }

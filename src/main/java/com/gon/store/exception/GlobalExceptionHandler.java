@@ -2,6 +2,7 @@ package com.gon.store.exception;
 
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,19 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    @ExceptionHandler(VideoGameNotFoundException.class)
-    public ProblemDetail handleNotFound(VideoGameNotFoundException ex){
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ProblemDetail handleNotFound(EntityNotFoundException ex){
         return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+    }
+
+    @ExceptionHandler(EmailDuplicateException.class)
+    public ProblemDetail handleDuplicateEmail(EmailDuplicateException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ProblemDetail handleDataIntegrityViolation(DataIntegrityViolationException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Cannot complete the operation due to data integrity constraints.");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

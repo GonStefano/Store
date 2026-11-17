@@ -31,5 +31,8 @@ public record VideoGameRequestDTO(
     Integer stock,
 
     @NotNull(message = "La fecha de lanzamiento es obligatoria")
-    LocalDate releaseDate
+    LocalDate releaseDate,
+
+    @NotNull(message = "El id de la desarrolladora es obligatorio")
+    Long developerId
 ) {}

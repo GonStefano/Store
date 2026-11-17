@@ -23,7 +23,6 @@ public class Developer {
     private String country;
     @Column(name = "WEBSITE", nullable = false, length = 255)
     private String website;
-    @Column(name = "GAMES", nullable = true)
     @OneToMany(mappedBy = "developer")
     private List<VideoGame> games;
 

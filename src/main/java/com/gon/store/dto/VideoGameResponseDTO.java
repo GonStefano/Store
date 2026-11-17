@@ -10,5 +10,6 @@ public record VideoGameResponseDTO(
     String category,
     BigDecimal price,
     Integer stock,
-    LocalDate releaseDate
+    LocalDate releaseDate,
+    Long developerID 
 ) {}

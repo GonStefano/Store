@@ -27,7 +27,6 @@ public class VideoGame {
     @Column(name = "PLATFORM", nullable = false, length = 255)
     private String platform;
 
-
     @Column(name = "CATEGORY", nullable = false, length = 255)
     private String category;
 
@@ -40,7 +39,6 @@ public class VideoGame {
     @Column(name = "RELEASE_DATE")
     private LocalDate releaseDate;
 
-    @Column(name = "DEVELOPER")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "developer_id")
     private Developer developer;
@@ -107,6 +105,14 @@ public class VideoGame {
 
     public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public Developer getDeveloper() {
+        return developer;
+    }
+
+    public void setDeveloper(Developer developer) {
+        this.developer = developer;
     }
 
     

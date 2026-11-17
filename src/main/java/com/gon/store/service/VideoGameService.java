@@ -7,16 +7,20 @@ import org.springframework.stereotype.Service;
 import com.gon.store.dto.PriceBetweenRequestDTO;
 import com.gon.store.dto.VideoGameRequestDTO;
 import com.gon.store.dto.VideoGameResponseDTO;
+import com.gon.store.entity.Developer;
 import com.gon.store.entity.VideoGame;
-import com.gon.store.exception.VideoGameNotFoundException;
+import com.gon.store.exception.EntityNotFoundException;
+import com.gon.store.repository.DeveloperRepository;
 import com.gon.store.repository.VideoGameRepository;
 
 @Service
 public class VideoGameService {
     private final VideoGameRepository videoGameRepository;
+    private final DeveloperRepository developerRepository;
 
-    private VideoGameService(VideoGameRepository videoGameRepository) {
+    private VideoGameService(VideoGameRepository videoGameRepository, DeveloperRepository developerRepository) {
         this.videoGameRepository = videoGameRepository;
+        this.developerRepository = developerRepository;
     }
 
     public VideoGameResponseDTO createVideoGame(VideoGameRequestDTO videoGame){
@@ -26,8 +30,14 @@ public class VideoGameService {
 
     public VideoGameResponseDTO findById(Long id){
         VideoGame game = videoGameRepository.findById(id)
-            .orElseThrow(() -> new VideoGameNotFoundException(id));
+            .orElseThrow(() -> new EntityNotFoundException("Videojuego",id));
         return toResponse(game);
+    }
+
+    public  VideoGame findEntityById(Long id){
+        VideoGame game = videoGameRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Videojuego",id));
+        return game;
     }
 
     public List<VideoGameResponseDTO> findAll(){
@@ -35,8 +45,9 @@ public class VideoGameService {
     }
 
     public void updateVideoGame(Long id, VideoGameRequestDTO videoGame){
-        VideoGame game = videoGameRepository.findById(id)
-            .orElseThrow(() -> new VideoGameNotFoundException(id));
+        VideoGame game = findEntityById(id);
+
+        Developer developer = developerRepository.findById(videoGame.developerId()).orElseThrow(() -> new EntityNotFoundException("Desarrolladora",videoGame.developerId()));
 
         game.setTitle(videoGame.title());
         game.setPlatform(videoGame.platform());
@@ -44,13 +55,14 @@ public class VideoGameService {
         game.setPrice(videoGame.price());
         game.setStock(videoGame.stock());
         game.setReleaseDate(videoGame.releaseDate());
+        game.setDeveloper(developer);
 
         videoGameRepository.save(game);
     }
 
     public void deleteVideoGame(Long id){
         if (!videoGameRepository.existsById(id)) {
-            throw new VideoGameNotFoundException(id);
+            throw new EntityNotFoundException("Videojuego",id);
         }
 
         videoGameRepository.deleteById(id);
@@ -87,12 +99,14 @@ public class VideoGameService {
             videoGame.getCategory(), 
             videoGame.getPrice(), 
             videoGame.getStock(), 
-            videoGame.getReleaseDate()
+            videoGame.getReleaseDate(),
+            videoGame.getDeveloper() != null ? videoGame.getDeveloper().getId() : null
         );
     }
 
     private VideoGame toEntity(VideoGameRequestDTO requestDTO){
-        return new VideoGame(
+        Developer developer = developerRepository.findById(requestDTO.developerId()).orElseThrow(() -> new EntityNotFoundException("Desarrolladora",requestDTO.developerId()));
+        VideoGame videoGame = new VideoGame(
             null,
             requestDTO.title(), 
             requestDTO.platform(), 
@@ -101,5 +115,9 @@ public class VideoGameService {
             requestDTO.stock(), 
             requestDTO.releaseDate()
         );
+        videoGame.setDeveloper(developer);
+        return videoGame;
     }
+
+
 }
