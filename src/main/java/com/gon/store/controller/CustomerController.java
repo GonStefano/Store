@@ -13,6 +13,7 @@ import com.gon.store.dto.CustomerResponseDTO;
 import com.gon.store.dto.SaleResponseDTO;
 import com.gon.store.service.CustomerService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +36,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    @Operation(summary = "Create a new customer.")
     @PostMapping
     public ResponseEntity<Void> createCustomer(@Valid @RequestBody CustomerRequestDTO customerRequestDTO, UriComponentsBuilder url) {
         CustomerResponseDTO customer = customerService.createCustomer(customerRequestDTO);
@@ -47,16 +49,19 @@ public class CustomerController {
         return ResponseEntity.created(locationOfNewCustomer).build();
     }
 
+    @Operation(summary = "Get customer by id.")
     @GetMapping("/{id}")
     public ResponseEntity<CustomerResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(customerService.findById(id));
     }
 
+    @Operation(summary = "Get all sales by customer id.")
     @GetMapping("/{id}/ventas")
     public ResponseEntity<List<SaleResponseDTO>> getSellByID(@PathVariable Long id) {
         return ResponseEntity.ok(customerService.findAllSales(id));
     }
     
+    @Operation(summary = "Update a customer by id.")
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateCustomer(@PathVariable Long id, @Valid  @RequestBody  CustomerRequestDTO customerRequestDTO) {
         customerService.updateCustomer(id, customerRequestDTO);
@@ -64,6 +69,7 @@ public class CustomerController {
         return ResponseEntity.noContent().build();
     }
     
+    @Operation(summary = "Delete a customer by id.")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id){
         customerService.deleteCustomer(id);;

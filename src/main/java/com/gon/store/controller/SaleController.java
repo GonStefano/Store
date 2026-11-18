@@ -7,6 +7,7 @@ import com.gon.store.dto.SaleRequestDTO;
 import com.gon.store.dto.SaleResponseDTO;
 import com.gon.store.service.SaleService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 import java.net.URI;
@@ -26,6 +27,7 @@ public class SaleController {
         this.saleService = saleService;
     }
 
+    @Operation(summary = "Register a new sale.")
     @PostMapping
     public ResponseEntity<Void> createSale(@Valid @RequestBody SaleRequestDTO saleRequestDTO, UriComponentsBuilder uri) {
         SaleResponseDTO sale = saleService.createSale(saleRequestDTO);

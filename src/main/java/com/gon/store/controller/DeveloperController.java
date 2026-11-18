@@ -8,6 +8,7 @@ import com.gon.store.dto.DeveloperRequestDTO;
 import com.gon.store.dto.DeveloperResponseDTO;
 import com.gon.store.service.DeveloperService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 import java.net.URI;
@@ -29,6 +30,7 @@ public class DeveloperController {
         this.developerService = developerService;
     }
 
+    @Operation(summary = "Create a new developer.")
     @PostMapping
     public ResponseEntity<Void> createDeveloper(@Valid @RequestBody DeveloperRequestDTO developer, UriComponentsBuilder ucb) {
         DeveloperResponseDTO dev = developerService.createDeveloper(developer);
@@ -40,17 +42,20 @@ public class DeveloperController {
         return ResponseEntity.created(locationOfNewDeveloper).build();
     }
 
+    @Operation(summary = "Get developer by id.")
     @GetMapping("/{id}")
     public ResponseEntity<DeveloperResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(developerService.findById(id));
     }
     
 
+    @Operation(summary = "Get all developers.")
     @GetMapping
     public ResponseEntity<List<DeveloperResponseDTO>> findAll() {
         return ResponseEntity.ok(developerService.findAll());
     }
     
+    @Operation(summary = "Update a developer by id.")
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateDeveloper(@PathVariable Long id, @Valid  @RequestBody DeveloperRequestDTO developer) {
         developerService.updateDeveloper(id, developer);
