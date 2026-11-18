@@ -12,15 +12,18 @@ import com.gon.store.entity.Sale;
 import com.gon.store.entity.VideoGame;
 import com.gon.store.exception.EntityNotFoundException;
 import com.gon.store.repository.SaleRepository;
+import com.gon.store.repository.VideoGameRepository;
 
 @Service 
 public class SaleService {
     private final SaleRepository saleRepository;
+    private final VideoGameRepository videoGameRepository;
     private final CustomerService customerService;
     private final VideoGameService videoGameService;
 
-    public SaleService(SaleRepository saleRepository, CustomerService customerService, VideoGameService videoGameService){
+    public SaleService(SaleRepository saleRepository, VideoGameRepository videoGameRepository, CustomerService customerService, VideoGameService videoGameService){
         this.saleRepository = saleRepository;
+        this.videoGameRepository = videoGameRepository;
         this.customerService = customerService;
         this.videoGameService = videoGameService;
     }
@@ -46,7 +49,7 @@ public class SaleService {
                 throw new IllegalArgumentException("There is not enough stock for the game: " + videoGame.getTitle());
             }
 
-            videoGame.setStock(videoGame.getStock() - 1);
+            videoGameRepository.decrementStock(videoGame.getId());
         }
 
         Sale sale = new Sale();
