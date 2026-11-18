@@ -28,6 +28,11 @@ public class GlobalExceptionHandler {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
     }
 
+    @ExceptionHandler(RegisterUserException.class)
+    public ProblemDetail handleRegisterUser(RegisterUserException ex){
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+    }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ProblemDetail handleDataIntegrityViolation(DataIntegrityViolationException ex){
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, "Cannot complete the operation due to data integrity constraints.");
