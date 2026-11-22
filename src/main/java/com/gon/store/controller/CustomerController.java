@@ -36,7 +36,7 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @Operation(summary = "Create a new customer.")
+    @Operation(summary = "Create a new customer.", description = "Registers a new customer in the system.")
     @PostMapping
     public ResponseEntity<Void> createCustomer(@Valid @RequestBody CustomerRequestDTO customerRequestDTO, UriComponentsBuilder url) {
         CustomerResponseDTO customer = customerService.createCustomer(customerRequestDTO);
@@ -49,19 +49,19 @@ public class CustomerController {
         return ResponseEntity.created(locationOfNewCustomer).build();
     }
 
-    @Operation(summary = "Get customer by id.")
+    @Operation(summary = "Get customer by id.", description = "Retrieves customer details by their unique identifier.")
     @GetMapping("/{id}")
     public ResponseEntity<CustomerResponseDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(customerService.findById(id));
     }
 
-    @Operation(summary = "Get all sales by customer id.")
+    @Operation(summary = "Get all sales by customer id.", description = "Retrieves all sales history associated with a specific customer ID.")
     @GetMapping("/{id}/ventas")
     public ResponseEntity<List<SaleResponseDTO>> getSellByID(@PathVariable Long id) {
         return ResponseEntity.ok(customerService.findAllSales(id));
     }
     
-    @Operation(summary = "Update a customer by id.")
+    @Operation(summary = "Update a customer by id.", description = "Updates an existing customer's details by their ID.")
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateCustomer(@PathVariable Long id, @Valid  @RequestBody  CustomerRequestDTO customerRequestDTO) {
         customerService.updateCustomer(id, customerRequestDTO);
@@ -69,10 +69,10 @@ public class CustomerController {
         return ResponseEntity.noContent().build();
     }
     
-    @Operation(summary = "Delete a customer by id.")
+    @Operation(summary = "Delete a customer by id.", description = "Removes a customer from the system by their ID.")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id){
-        customerService.deleteCustomer(id);;
+        customerService.deleteCustomer(id);
 
         return ResponseEntity.noContent().build();
     }

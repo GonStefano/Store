@@ -30,7 +30,7 @@ public class DeveloperController {
         this.developerService = developerService;
     }
 
-    @Operation(summary = "Create a new developer.")
+    @Operation(summary = "Create a new developer.", description = "Registers a new video game developer in the system.")
     @PostMapping
     public ResponseEntity<Void> createDeveloper(@Valid @RequestBody DeveloperRequestDTO developer, UriComponentsBuilder ucb) {
         DeveloperResponseDTO dev = developerService.createDeveloper(developer);
@@ -42,20 +42,20 @@ public class DeveloperController {
         return ResponseEntity.created(locationOfNewDeveloper).build();
     }
 
-    @Operation(summary = "Get developer by id.")
+    @Operation(summary = "Get developer by id.", description = "Retrieves developer details by their unique identifier.")
     @GetMapping("/{id}")
     public ResponseEntity<DeveloperResponseDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(developerService.findById(id));
     }
     
 
-    @Operation(summary = "Get all developers.")
+    @Operation(summary = "Get all developers.", description = "Retrieves a list of all registered developers.")
     @GetMapping
     public ResponseEntity<List<DeveloperResponseDTO>> findAll() {
         return ResponseEntity.ok(developerService.findAll());
     }
     
-    @Operation(summary = "Update a developer by id.")
+    @Operation(summary = "Update a developer by id.", description = "Updates an existing developer's information by their ID.")
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateDeveloper(@PathVariable Long id, @Valid  @RequestBody DeveloperRequestDTO developer) {
         developerService.updateDeveloper(id, developer);

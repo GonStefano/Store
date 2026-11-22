@@ -27,7 +27,7 @@ public class SaleController {
         this.saleService = saleService;
     }
 
-    @Operation(summary = "Register a new sale.")
+    @Operation(summary = "Register a new sale.", description = "Processes and records a new video game sale for a customer.")
     @PostMapping
     public ResponseEntity<Void> createSale(@Valid @RequestBody SaleRequestDTO saleRequestDTO, UriComponentsBuilder uri) {
         SaleResponseDTO sale = saleService.createSale(saleRequestDTO);
