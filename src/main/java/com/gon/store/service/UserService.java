@@ -32,6 +32,10 @@ public class UserService implements UserDetailsService{
         return userRepository.save(newUser);
     }
 
+    public User registerUser (String username, String password){
+        return registerUser(username, password, Rol.CUSTOMER);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)

@@ -12,6 +12,7 @@ import com.gon.store.dto.AuthResponseDTO;
 import com.gon.store.dto.LoginRequestDTO;
 import com.gon.store.dto.RegisterRequestDTO;
 import com.gon.store.dto.UserResponseDTO;
+import com.gon.store.entity.Rol;
 import com.gon.store.entity.User;
 import com.gon.store.service.JwtService;
 import com.gon.store.service.UserService;
@@ -41,7 +42,7 @@ public class AuthController {
     @Operation(summary = "Register a new user.", description = "Registers a new user into the database.")
     @PostMapping("/register")
     public ResponseEntity<AuthResponseDTO> register( @Valid @RequestBody RegisterRequestDTO request) {
-        User user = userService.registerUser(request.username(), request.password(), request.rol());
+        User user = userService.registerUser(request.username(), request.password());
         String token = jwtService.generateToken(user);
         return ResponseEntity.ok(new AuthResponseDTO(token));
     }

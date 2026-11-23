@@ -47,7 +47,7 @@ public class CustomerService {
 
     public List<SaleResponseDTO> findAllSales(Long idCustomer){
         if (!customerRepository.existsById(idCustomer)) {
-            throw new EntityNotFoundException("Cliente", idCustomer);
+            throw new EntityNotFoundException("Customer", idCustomer);
         }
         return saleRepository.findByCustomerId(idCustomer).stream()
             .map(this::toResponseSale).

@@ -40,7 +40,7 @@ public class DeveloperService {
     }
 
     public void updateDeveloper(Long id, DeveloperRequestDTO developer){
-        Developer dev = developerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Desarrolladora",id));
+        Developer dev = developerRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Developer",id));
 
         dev.setName(developer.name());
         dev.setCountry(developer.country());

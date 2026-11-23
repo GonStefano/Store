@@ -30,13 +30,13 @@ public class VideoGameService {
 
     public VideoGameResponseDTO findById(Long id){
         VideoGame game = videoGameRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Videojuego",id));
+            .orElseThrow(() -> new EntityNotFoundException("VideoGame",id));
         return toResponse(game);
     }
 
     public  VideoGame findEntityById(Long id){
         VideoGame game = videoGameRepository.findById(id)
-            .orElseThrow(() -> new EntityNotFoundException("Videojuego",id));
+            .orElseThrow(() -> new EntityNotFoundException("VideoGame",id));
         return game;
     }
 
@@ -47,7 +47,7 @@ public class VideoGameService {
     public void updateVideoGame(Long id, VideoGameRequestDTO videoGame){
         VideoGame game = findEntityById(id);
 
-        Developer developer = developerRepository.findById(videoGame.developerId()).orElseThrow(() -> new EntityNotFoundException("Desarrolladora",videoGame.developerId()));
+        Developer developer = developerRepository.findById(videoGame.developerId()).orElseThrow(() -> new EntityNotFoundException("Developer",videoGame.developerId()));
 
         game.setTitle(videoGame.title());
         game.setPlatform(videoGame.platform());
@@ -62,7 +62,7 @@ public class VideoGameService {
 
     public void deleteVideoGame(Long id){
         if (!videoGameRepository.existsById(id)) {
-            throw new EntityNotFoundException("Videojuego",id);
+            throw new EntityNotFoundException("VideoGame",id);
         }
 
         videoGameRepository.deleteById(id);
@@ -76,7 +76,7 @@ public class VideoGameService {
 
     public List<VideoGameResponseDTO> findByPriceBetween(PriceBetweenRequestDTO prices){
         if (prices.minPrice().compareTo(prices.maxPrice()) > 0) {
-            throw new IllegalArgumentException("El minimo debe ser menor al maximo");
+            throw new IllegalArgumentException("Minimum price must be less than or equal to maximum price");
         }
         return videoGameRepository.findByPriceBetween(prices.minPrice(), prices.maxPrice())
             .stream()
@@ -105,7 +105,7 @@ public class VideoGameService {
     }
 
     private VideoGame toEntity(VideoGameRequestDTO requestDTO){
-        Developer developer = developerRepository.findById(requestDTO.developerId()).orElseThrow(() -> new EntityNotFoundException("Desarrolladora",requestDTO.developerId()));
+        Developer developer = developerRepository.findById(requestDTO.developerId()).orElseThrow(() -> new EntityNotFoundException("Developer",requestDTO.developerId()));
         VideoGame videoGame = new VideoGame(
             null,
             requestDTO.title(), 

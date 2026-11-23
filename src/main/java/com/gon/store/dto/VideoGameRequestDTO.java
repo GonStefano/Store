@@ -10,29 +10,29 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 public record VideoGameRequestDTO(
-    @NotBlank(message = "El título es obligatorio")
-    @Size(max = 255, message = "El título no puede superar los 255 caracteres")
+    @NotBlank(message = "Title is required")
+    @Size(max = 255, message = "Title must not exceed 255 characters")
     String title,
 
-    @NotBlank(message = "La plataforma es obligatoria")
-    @Size(max = 255, message = "La plataforma no puede superar los 255 caracteres")
+    @NotBlank(message = "Platform is required")
+    @Size(max = 255, message = "Platform must not exceed 255 characters")
     String platform,
 
-    @NotBlank(message = "La categoría es obligatoria")
-    @Size(max = 255, message = "La categoría no puede superar los 255 caracteres")
+    @NotBlank(message = "Category is required")
+    @Size(max = 255, message = "Category must not exceed 255 characters")
     String category,
 
-    @NotNull(message = "El precio es obligatorio")
-    @Positive(message = "El precio debe ser mayor a cero")
+    @NotNull(message = "Price is required")
+    @Positive(message = "Price must be greater than zero")
     BigDecimal price,
 
-    @NotNull(message = "El stock es obligatorio")
-    @PositiveOrZero(message = "El stock no debe ser negativo")
+    @NotNull(message = "Stock is required")
+    @PositiveOrZero(message = "Stock must not be negative")
     Integer stock,
 
-    @NotNull(message = "La fecha de lanzamiento es obligatoria")
+    @NotNull(message = "Release date is required")
     LocalDate releaseDate,
 
-    @NotNull(message = "El id de la desarrolladora es obligatorio")
+    @NotNull(message = "Developer ID is required")
     Long developerId
 ) {}

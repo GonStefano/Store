@@ -7,11 +7,11 @@ import jakarta.validation.constraints.Positive;
 
 public record PriceBetweenRequestDTO(
 
-    @NotNull  (message = "El precio minimo es obligatorio")
-    @Positive (message = "Debe ser positivo")
+    @NotNull(message = "Minimum price is required")
+    @Positive (message = "Must be positive")
     BigDecimal minPrice,
 
-   @NotNull  (message = "El precio maximo es obligatorio")
-   @Positive(message = "Debe ser positivo")
+   @NotNull(message = "Maximum price is required")
+   @Positive(message = "Must be positive")
     BigDecimal maxPrice
 ) {}

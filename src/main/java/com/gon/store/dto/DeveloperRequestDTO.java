@@ -4,11 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record DeveloperRequestDTO(
-    @NotBlank(message = "Nombre es obligatorio")
-    @Size(max = 255, message = "Nombre no debe superar los 255 caracteres")
+    @NotBlank(message = "Name is required")
+    @Size(max = 255, message = "Name must not exceed 255 characters")
     String name,
-    @NotBlank(message = "Pais es obligatorio")
-    @Size(max = 255, message = "Pais no debe superar los 255 caracteres")
+    @NotBlank(message = "Country is required")
+    @Size(max = 255, message = "Country must not exceed 255 characters")
     String country,
     String website
 ) {}
